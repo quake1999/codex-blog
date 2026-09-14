@@ -1,0 +1,26 @@
+'use client';
+
+import Link from 'next/link';
+import { FormEvent, useState } from 'react';
+import type { Post } from '@/lib/posts';
+
+type PostSummary = Omit<Post, 'content'>;
+
+const notes = [['08.21', '最近反复听坂本龙一的《Aqua》。有些旋律不是用来记住的，是用来让时间慢下来的。'], ['08.14', '好设计不是把所有东西都说出来，而是知道什么应该保持沉默。'], ['08.02', '窗台上的薄荷终于长出了新叶。小事也值得认真记录。']];
+
+export function HomeClient({ posts }: { posts: PostSummary[] }) {
+  const [menu, setMenu] = useState(false);
+  const [done, setDone] = useState(false);
+  const [email, setEmail] = useState('');
+  function submit(event: FormEvent) { event.preventDefault(); if (email) setDone(true); }
+  return <main>
+    <nav className="nav shell"><a className="brand" href="#top"><span>Q</span>quake1999</a><button className="menu" onClick={() => setMenu((open) => !open)} aria-expanded={menu} aria-controls="primary-navigation">{menu ? '关闭' : '菜单'}</button><div id="primary-navigation" className={menu ? 'navlinks open' : 'navlinks'}><a href="#writing">文章</a><a href="#notes">片刻</a><a href="#about">关于</a><a className="app-link" href="https://daylist-todo.garden-bream-0513.chatgpt.site" target="_blank" rel="noreferrer">健身打卡 ↗</a><a className="nav-cta" href="#subscribe">订阅来信 ↗</a></div></nav>
+    <section className="hero shell" id="top"><div><p className="eyebrow"><span />一个设计师的观察与漫游</p><h1>在日常的<br /><em>缝隙</em>里，<br />捡拾微光。</h1><p className="intro">你好，我是 quake1999。一名独立设计师和不够严肃的写作者。这里记录我对设计、生活，以及那些看似无用之事的思考。</p><a className="text-link" href="#writing">开始阅读 <b>↓</b></a></div><div className="hero-art" aria-hidden="true"><div className="sun" /><div className="paper paper-one"><i>「</i><p>生活不在别处，<br />就在每一个<br />被认真看见的瞬间。</p><small>— quake1999，夏日手记</small></div><div className="paper paper-two">slow<br />down<span>and look closer</span></div><span className="orbit">✦</span></div></section>
+    <a className="project-spotlight shell" href="https://daylist-todo.garden-bream-0513.chatgpt.site" target="_blank" rel="noreferrer"><div><span>LIVE PROJECT / 01</span><h2>FORMA 健身打卡</h2><p>记录每一次训练，让持续发生。</p></div><strong>打开应用 ↗</strong></a>
+    <section className="section shell" id="writing"><div className="section-head"><div><p className="kicker">FEATURED WRITING</p><h2>最近写下的</h2></div><Link href="/writing">查看全部文章 →</Link></div><div className="posts" id="all">{posts.map((post, index) => <article className="post" key={post.slug}><div className={`post-art ${post.tone}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{post.mark}</strong><div className="art-lines" /></div><div className="post-body"><p className="meta"><span>{post.category}</span>{post.date} · {post.readTime}</p><h3>{post.title}</h3><p>{post.excerpt}</p><Link href={`/posts/${post.slug}`}>阅读全文 <span>↗</span></Link></div></article>)}</div></section>
+    <section className="notes-wrap" id="notes"><div className="notes shell"><div className="notes-title"><p className="kicker">SMALL MOMENTS</p><h2>片刻</h2><p>一些还没长成文章的念头，<br />和生活留下的边角料。</p><b>↳ 随时更新</b></div><div>{notes.map((note) => <div className="note" key={note[0]}><time>{note[0]}</time><p>{note[1]}</p><span>✳</span></div>)}</div></div></section>
+    <section className="about shell" id="about"><div className="portrait"><span>Q99</span><i>since<br />1999</i></div><div className="about-copy"><p className="kicker">A LITTLE ABOUT ME</p><h2>保持好奇，<br />也保持一点笨拙。</h2><p>我住在杭州，从事品牌与数字产品设计。工作之外，我喜欢逛旧书店、拍没有人的街道，以及研究怎样把一杯手冲咖啡做得不那么难喝。</p><p>这个博客是我的数字花园，没有宏大的目标，只希望在这里慢慢种下一些诚实的想法。</p><a className="text-link" href="mailto:hello@linmo.blog">和我聊聊 <b>↗</b></a></div></section>
+    <section className="newsletter" id="subscribe"><div className="shell news-inner"><div><p className="kicker">A LETTER, SOMETIMES</p><h2>偶尔，给你写封信。</h2><p>不定期分享新文章、近况和最近喜欢的东西。<br />不追热点，也绝不打扰。</p></div>{done ? <div className="success">收到啦，谢谢你的订阅。<span>下一封信见 ✦</span></div> : <form onSubmit={submit}><label htmlFor="email">你的邮箱</label><div><input id="email" type="email" placeholder="name@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required /><button>订阅 →</button></div><small>随时可以退订。你的邮箱不会被分享。</small></form>}</div></section>
+    <footer className="shell"><a className="brand" href="#top"><span>Q</span>quake1999</a><p>© 2026 quake1999。用好奇心与咖啡因搭建。</p><div><a href="https://daylist-todo.garden-bream-0513.chatgpt.site" target="_blank" rel="noreferrer">健身打卡</a><a href="#">即刻</a><a href="#">RSS</a></div></footer>
+  </main>;
+}

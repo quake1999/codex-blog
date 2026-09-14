@@ -1,3 +1,6 @@
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
 export type Post = {
   slug: string;
   title: string;
@@ -10,11 +13,7 @@ export type Post = {
   content: string;
 };
 
-const files = import.meta.glob('/content/posts/*.md', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>;
+const postsDirectory = join(process.cwd(), 'content', 'posts');
 
 function parseFile(path: string, source: string): Post {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
@@ -39,8 +38,9 @@ function parseFile(path: string, source: string): Post {
 }
 
 export function getAllPosts() {
-  return Object.entries(files)
-    .map(([path, source]) => parseFile(path, source))
+  return readdirSync(postsDirectory)
+    .filter((file) => file.endsWith('.md'))
+    .map((file) => parseFile(file, readFileSync(join(postsDirectory, file), 'utf8')))
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
