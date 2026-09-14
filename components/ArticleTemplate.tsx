@@ -5,7 +5,7 @@ import { useState } from 'react';
 const template = `---
 title: 在这里填写文章标题
 category: 技术
-date: 2026-09-15
+date: YYYY-MM-DD
 readTime: 5 分钟
 excerpt: 用一两句话概括这篇文章的内容。
 tone: blue
