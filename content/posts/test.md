@@ -1,5 +1,3 @@
-test
-### 标题
 ---
 title: 第一篇技术文档
 category: 技术
